@@ -74,3 +74,4 @@ public static class CombatConstants
 
 - C#의 static 필드가 정확히 CLR 내부에서 어떻게 관리되는지 (전통적인 Data/BSS 모델과 어떻게 다른지)
 - Unity의 `[RuntimeInitializeOnLoadMethod]`가 static 필드 초기화 시점과 어떤 관계가 있는지
+-
