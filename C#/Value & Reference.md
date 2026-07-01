@@ -100,10 +100,6 @@ int? x = null;    // OK — Nullable<int>
 
 값 타입을 참조 타입처럼 다뤄야 할 때 발생하는 변환
 
-## boxing / unboxing
-
-값 타입을 참조 타입처럼 다뤄야 할 때 발생하는 변환
-
 ```csharp
 int a = 42;
 object obj = a;   // boxing — 값 타입을 Heap에 올림 (object는 참조 타입)
