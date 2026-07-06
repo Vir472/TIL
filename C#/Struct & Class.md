@@ -1,4 +1,4 @@
-# TIL - C# struct vs class
+# struct vs class
 
 ## 핵심 개념
 
