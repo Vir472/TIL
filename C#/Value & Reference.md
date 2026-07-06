@@ -1,4 +1,4 @@
-# TIL - 값 타입 vs 참조 타입 (Value Type vs Reference Type)
+# 값 타입 vs 참조 타입 (Value Type vs Reference Type)
 
 ## 핵심 개념
 
