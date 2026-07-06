@@ -3,7 +3,7 @@
 ## 핵심 개념
 
 - 둘 다 데이터와 메서드를 묶는 사용자 정의 타입
-- 가장 큰 차이는 [Value & Reference](Value & Reference.md) 참고
+- 가장 큰 차이는 [Value & Reference](<Value\ &\ Reference.md>) 참고
 - 언제 뭘 쓸지 판단하는 기준이 중요
 
 ## 문법 비교
