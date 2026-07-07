@@ -76,7 +76,7 @@ struct Obstacle : IDamageable  // OK
 }
 ```
 
-## 복사 동작 차이 — 실수하기 쉬운 부분
+## 복사 동작 차이
 
 ```csharp
 // struct — 독립적인 복사본
