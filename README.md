@@ -2,6 +2,7 @@
 
 ### 📂 C#
 
+- [Inheritance](./C#/C#/Inheritance.md)
 - [Struct & Class](./C%23/Struct%20%26%20Class.md)
 - [This](./C%23/This.md)
 - [Value & Reference](./C%23/Value%20%26%20Reference.md)
@@ -9,6 +10,7 @@
 
 ### 📂 CS (Computer Science)
 
+- [AVI](./CS/AVI.md)
 - [BMP](./CS/BMP.md)
 - [CPU vs GPU](./CS/CPU%20vs%20GPU.md)
 - [CUDA](./CS/CUDA.md)
