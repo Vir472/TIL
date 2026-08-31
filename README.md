@@ -79,8 +79,15 @@
 ### 📂 Unity
 
 - [Animation](./Unity/Animation.md)
+- [BoxCollider2D](./Unity/BoxCollider2D.md)
 - [Collider & Rigidbody](./Unity/Collider%20&%20Rigidbody.md)
+- [GetComponent](./Unity/GetComponent.md)
 - [ObjectPooling](./Unity/ObjectPooling.md)
+- [Projection](./Unity/Projection.md)
 - [Pysics&Render Frame](./Unity/Pysics%26Render%20Frame.md)
+- [Rigidbody2D](./UnityRigidbody2D.md)
+- [Script Basic](./Unity/Script%20Basic.md)
+- [Scriptable Object](./Unity/Scriptable%20Object.md)
+- [Sprite Renderer](./Unity/Sprite%20Renderer.md)
 - [Transform](./Unity/Transform.md)
 - [Unity Lifecycle](./Unity/Unity%20Lifecycle.md)
