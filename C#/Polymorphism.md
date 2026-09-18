@@ -1,6 +1,4 @@
-# TIL - C# virtual / abstract / override
-
-## 다형성 (Polymorphism)
+# 다형성 (Polymorphism)
 
 - 객체지향의 4대 원칙(캡슐화, 상속, 다형성, 추상화) 중 하나
 - **"같은 타입으로 참조해도 실제 타입에 따라 다르게 동작한다"**

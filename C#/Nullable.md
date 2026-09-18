@@ -1,9 +1,4 @@
-# TIL - C# Nullable
-
-## 관련 노트
-
-→ [[TIL-ValueType-vs-ReferenceType]] — 값 타입/참조 타입과 null
-→ [[csharp-static]] — static과 null 초기화
+# Nullable
 
 ## 핵심 개념
 
