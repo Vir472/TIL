@@ -1,142 +1,111 @@
-# TIL - C# Interface (인터페이스)
+# 인터페이스 (Interface)
 
 ## 핵심 개념
 
-- **"이 기능을 반드시 구현해야 한다"는 계약(Contract)을 정의하는 타입**
-- 구현 없이 시그니처만 선언 (C# 8.0부터 기본 구현 가능)
-- 클래스는 하나의 부모만 상속 가능하지만 인터페이스는 **여러 개 구현 가능**
+- **인터페이스**: "이 기능들을 제공하겠다"는 **약속(계약)만 정의**한 타입
+- 무엇을 할 수 있는지(메서드 이름, 매개변수, 반환 타입)만 정하고, **어떻게 하는지는 구현하는 클래스가 정함**
+- 클래스가 인터페이스를 구현하면, 그 약속을 모두 지켜야 컴파일됨
+- 관례상 이름 앞에 `I`를 붙임
 
-## abstract class vs interface
-
-| 항목        | abstract class        | interface        |
-| ----------- | --------------------- | ---------------- |
-| 인스턴스화  | 불가                  | 불가             |
-| 기본 구현   | 가능                  | C# 8.0+부터 가능 |
-| 필드        | 가능                  | 불가             |
-| 생성자      | 가능                  | 불가             |
-| 접근 제한자 | 지정 가능             | 기본 public      |
-| 다중 구현   | 불가 (단일 상속)      | 가능             |
-| 용도        | 공통 기능 + 계층 구조 | 기능 계약만 정의 |
-
-## 기본 문법
-
-```csharp
-interface IDamageable
-{
-    void TakeDamage(int damage);  // 반드시 구현해야 함
-    int Hp { get; }               // 프로퍼티도 선언 가능
-}
-
-class Enemy : IDamageable
-{
-    public int Hp { get; private set; } = 100;
-
-    public void TakeDamage(int damage)
-    {
-        Hp -= damage;
-    }
-}
+```mermaid
+graph TD
+    I["피해를 받을 수 있음<br/>인터페이스"]
+    I -.-> P["플레이어"]
+    I -.-> E["적"]
+    I -.-> B["부서지는 상자"]
+    A["공격 코드"] -->|"인터페이스만 앎"| I
 ```
 
-- 인터페이스 이름은 관례상 **I**로 시작
-- 구현 클래스는 인터페이스의 모든 멤버를 반드시 구현해야 함
-- 구현하지 않으면 컴파일 에러
+- 공격 코드는 상대가 플레이어인지, 적인지, 상자인지 몰라도 됨. "피해를 받을 수 있는가"만 알면 됨
 
-## 다중 구현
+## 가질 수 있는 것
 
-```csharp
-interface IDamageable { void TakeDamage(int dmg); }
-interface IHealable   { void Heal(int amount); }
-interface IMovable    { void Move(Vector2 dir); }
+| 멤버 | 가능 여부 |
+| --- | --- |
+| 메서드 | 가능 |
+| 프로퍼티 | 가능 (값 저장 없이 접근자만 약속함) |
+| 이벤트, 인덱서 | 가능 |
+| 필드 (상태) | **불가** |
+| 생성자 | **불가** |
+| 기본 구현 | C# 8부터 가능 |
+| 정적 추상 멤버 | C# 11부터 가능 |
 
-// 여러 인터페이스 동시 구현 가능
-class Player : IDamageable, IHealable, IMovable
-{
-    public void TakeDamage(int dmg) { ... }
-    public void Heal(int amount) { ... }
-    public void Move(Vector2 dir) { ... }
-}
-```
+- 인터페이스는 **상태를 가질 수 없음**. 약속만 정하고 데이터는 구현하는 쪽이 가짐
 
-C#은 클래스 다중 상속이 불가능하지만 인터페이스는 여러 개 구현 가능
+## 구현 규칙
 
-## 인터페이스 타입으로 참조
+| 규칙 | 내용 |
+| --- | --- |
+| 모두 구현 | 인터페이스의 모든 멤버를 구현해야 함 (기본 구현이 있는 것 제외) |
+| 공개 | 구현한 멤버는 `public`이어야 함 |
+| 여러 개 가능 | 한 클래스가 **인터페이스를 여러 개** 구현할 수 있음 |
+| 상속과 함께 | 클래스 하나를 상속하면서 인터페이스 여러 개를 구현할 수 있음 |
+| 구조체도 가능 | 구조체도 인터페이스를 구현할 수 있음 |
 
-```csharp
-IDamageable target = new Enemy();  // 인터페이스 타입으로 참조
-target.TakeDamage(10);             // IDamageable 멤버만 접근 가능
+**명시적 구현**
 
-// 다양한 타입을 같은 인터페이스로 다룰 수 있음
-List<IDamageable> damageables = new List<IDamageable>
-{
-    new Enemy(),
-    new Boss(),
-    new BreakableWall()  // 적이 아니어도 IDamageable이면 같이 관리 가능
-};
+- 인터페이스 이름을 붙여 구현하면, 그 멤버는 **인터페이스 타입으로 다룰 때만** 보임
+- 두 인터페이스에 같은 이름의 멤버가 있어 충돌할 때, 또는 클래스의 공개 목록을 깔끔하게 두고 싶을 때 씀
 
-foreach (var d in damageables)
-    d.TakeDamage(10);
-```
+## 인터페이스는 타입임
 
-## 인터페이스 상속
+- 인터페이스를 변수, 매개변수, 반환 타입, 컬렉션 요소 타입으로 쓸 수 있음
+- 인터페이스 타입 변수에는 그 인터페이스를 구현한 **어떤 객체든** 담을 수 있음
+- 이것이 [[Polymorphism]]을 상속 없이 실현하는 방법임
+- 제네릭 제약에 쓰면 "이 약속을 지키는 타입만 받겠다"를 컴파일러가 보장해줌. [[Generic]] 참고
 
-인터페이스끼리도 상속 가능
+## 왜 쓰는가
 
-```csharp
-interface IAttackable : IDamageable
-{
-    void Attack();  // IDamageable의 TakeDamage + 추가로 Attack도 구현 필요
-}
-```
+| 효과 | 내용 |
+| --- | --- |
+| 결합도 감소 | 쓰는 쪽은 구체 클래스가 아니라 약속만 앎 |
+| 교체 용이 | 같은 약속을 지키는 다른 구현으로 바꿔 끼울 수 있음 |
+| 다중 능력 | 상속은 하나뿐이지만 인터페이스는 여러 개를 붙일 수 있음 |
+| 테스트 | 가짜 구현을 만들어 넣기 쉬움 |
 
-## C# 8.0+ 기본 구현
+- 설계 원칙과의 관계
+  - 작게 나눠 역할별로 정의 — [[Interface Segregation Principle]]
+  - 구체 대신 인터페이스에 의존 — [[SOLID]]의 의존성 역전
+  - 확장 지점으로 활용 — [[Open-Closed Principle]]
 
-인터페이스에 기본 구현을 제공할 수 있음
+## 추상 클래스와의 차이
 
-```csharp
-interface ILoggable
-{
-    void Log(string message) => Console.WriteLine(message);  // 기본 구현
-    void LogError(string message);  // 구현 필수
-}
-```
+- 같은 계열이고 상태와 구현을 공유한다면 추상 클래스, 서로 다른 계열에 같은 능력을 붙인다면 인터페이스
+- 자세한 비교는 [[Abstract Class]] 참고
 
-- 구현 클래스가 override하지 않으면 기본 구현이 사용됨
-- abstract class의 virtual 메서드와 비슷하지만 필드를 가질 수 없다는 차이
+## 주의할 점
 
-## 명시적 구현
+**구조체를 인터페이스로 다루면 박싱됨**
 
-같은 메서드 이름이 여러 인터페이스에 있을 때 충돌 해결
+- 구조체를 인터페이스 타입 변수에 담는 순간 박싱되어 힙에 복사본이 생김
+- 제네릭 제약으로 다루면 박싱을 피할 수 있음. [[Struct]], [[Boxing & Unboxing]] 참고
 
-```csharp
-interface IA { void Do(); }
-interface IB { void Do(); }
+**인터페이스를 나중에 바꾸면 구현이 전부 깨짐**
 
-class MyClass : IA, IB
-{
-    void IA.Do() => Console.WriteLine("A");  // IA 전용
-    void IB.Do() => Console.WriteLine("B");  // IB 전용
-}
-
-// 사용 시 인터페이스 타입으로 캐스팅해서 접근
-IA a = new MyClass();
-a.Do();  // "A"
-```
+- 멤버를 하나 추가하면 그 인터페이스를 구현한 모든 클래스가 컴파일 에러가 남
+- 기본 구현을 넣으면 완화되지만, 처음부터 역할을 작게 정의해 두는 것이 더 근본적인 대책임
 
 ## 게임 개발 관점에서
 
-- **GetComponent와 조합**: Unity에서 `GetComponent<IDamageable>()`처럼 인터페이스로 컴포넌트를 가져올 수 있음. 구체적인 타입을 몰라도 기능만으로 접근 가능
-- **충돌 처리**: OnTriggerEnter에서 충돌한 오브젝트가 IDamageable을 구현하고 있는지 확인해서 처리하는 패턴이 일반적
+**컴포넌트를 인터페이스로 찾기**
 
-```
-  충돌한 오브젝트가 IDamageable이면 → TakeDamage 호출
-  아니면 → 무시
-```
+- 유니티의 컴포넌트 조회는 **인터페이스 타입으로도 동작함**
+- 맞은 대상에서 "피해를 받을 수 있음" 인터페이스를 찾으면, 대상의 종류와 상관없이 같은 코드로 데미지를 줄 수 있음
+- 태그로 종류를 일일이 구분하는 것보다 확장에 강함. [[Layer & Tag]], [[GetComponent]] 참고
 
-- **느슨한 결합**: 구체적인 클래스 대신 인터페이스에 의존하면 나중에 구현체를 바꿔도 사용하는 쪽 코드를 수정할 필요 없음
+**인스펙터에 그대로 노출되지 않음**
+
+- 인터페이스 타입 필드는 기본 직렬화 대상이 아니라 인스펙터에 나타나지 않음
+- 컴포넌트를 연결하고 싶다면 구체 타입이나 MonoBehaviour 타입 필드로 받고 코드에서 인터페이스로 꺼내 쓰거나, 일반 클래스라면 참조 직렬화 어트리뷰트를 씀. [[Serialization]] 참고
+
+**유니티 자체가 인터페이스를 활용함**
+
+- UI 이벤트 시스템은 클릭, 드래그 같은 이벤트를 각각 인터페이스로 제공함. 필요한 인터페이스만 구현하면 해당 이벤트를 받을 수 있음
 
 ## 의문점 / 더 알아볼 것
 
-- `is` / `as` 패턴 — 인터페이스 구현 여부 런타임 체크
-- Dependency Injection — 인터페이스 기반 의존성 주입 패턴
-- `IComparable<T>`, `IEnumerable<T>` — C# 내장 인터페이스 활용
+- 인터페이스 기본 구현의 동작과 한계
+- 정적 추상 멤버 — 제네릭 수학 연산에 쓰이는 방식
+- 명시적 구현이 필요한 구체적인 상황
+- 인터페이스 호출의 내부 동작과 성능
+- 관련 노트 — [[Inheritance]], [[Virtual]], [[Dependency Injection]]
